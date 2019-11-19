@@ -1,6 +1,10 @@
 ---
 title: Plain English Contributor License Agreement
 edition: Development Draft
+signatures:
+  - header: I am signing this contributor license agreement on the date by my signature.
+    term: Contributor
+    information: [ date, email, address ]
 ---
 
 # Purpose

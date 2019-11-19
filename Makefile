@@ -17,14 +17,17 @@ docx: $(addprefix $(BUILD)/,$(BASENAMES:=.docx))
 pdf: $(addprefix $(BUILD)/,$(BASENAMES:=.pdf))
 md: $(addprefix $(BUILD)/,$(BASENAMES:=.md))
 
-$(BUILD)/%.docx: $(BUILD)/%.form.json $(BUILD)/%.directions.json $(BUILD)/%.title $(BUILD)/%.edition blanks.json %.json styles.json | $(CFDOCX) $(BUILD)
-	$(CFDOCX) --title "$(shell cat $(BUILD)/$*.title)" --edition "$(shell cat $(BUILD)/$*.edition)" --values blanks.json --directions $(BUILD)/$*.directions.json --styles styles.json --signatures $*.json --number outline --indent-margins --left-align-title $< > $@
+$(BUILD)/%.docx: $(BUILD)/%.form.json $(BUILD)/%.directions.json $(BUILD)/%.title $(BUILD)/%.edition blanks.json $(BUILD)/%.json styles.json | $(CFDOCX) $(BUILD)
+	$(CFDOCX) --title "$(shell cat $(BUILD)/$*.title)" --edition "$(shell cat $(BUILD)/$*.edition)" --values blanks.json --directions $(BUILD)/$*.directions.json --styles styles.json --signatures $(BUILD)/$*.json --number outline --indent-margins --left-align-title $< > $@
 
 $(BUILD)/%.title: %.md | $(CFCM) $(JSON)
 	$(CFCM) parse -m < $< | $(JSON) frontMatter.title > $@
 
 $(BUILD)/%.edition: %.md | $(CFCM) $(JSON)
 	$(CFCM) parse -m < $< | $(JSON) frontMatter.edition > $@
+
+$(BUILD)/%.json: %.md | $(CFCM) $(JSON)
+	$(CFCM) parse -m < $< | $(JSON) frontMatter.signatures > $@
 
 $(BUILD)/%.md: $(BUILD)/%.form.json $(BUILD)/%.directions.json $(BUILD)/%.title blanks.json | $(CFCM) $(BUILD)
 	$(CFCM) stringify --title "$(shell cat $(BUILD)/$*.title)" --edition "$(shell cat $(BUILD)/$*.edition)" --values blanks.json --directions $(BUILD)/$*.directions.json --ordered --ids < $< > $@
