@@ -1,6 +1,6 @@
 ---
 title: Plain English Contributor License Agreement
-edition: Development Draft
+edition: Version 1.0.0
 signatures:
   - header: I am signing this contributor license agreement on the date by my signature.
     term: Contributor
